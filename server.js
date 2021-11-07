@@ -7,6 +7,8 @@ const personel = require('./personel');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
+const PORT = process.env.PORT || 5000;
+
 dotenv.config();
 
 connectDB();
@@ -31,6 +33,5 @@ app.post('/api/personels', asyncHandler(async(req, res) => {
     res.send('personel saved');
 }));
 
-const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, console.log(`Server running in ${process.env.NODE_ENV} on port ${PORT}`.yellow.bold));
