@@ -1,10 +1,11 @@
 const express = require('express');
-const personel = require('./dummyData/personel');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const colors = require('colors');
 const asyncHandler = require('express-async-handler');
-const Personel = require('./models/personelModel');
+const personel = require('./personel');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 
 dotenv.config();
 
@@ -12,18 +13,22 @@ connectDB();
 
 const app = express();
 
+app.use(bodyParser.json());
+
+app.use(cors());
+
 app.get('/', (req, res) => {
     res.send('API activated!');
 });
 
 app.get('/api/personels', asyncHandler(async(req, res) => {
-    const personel = await Personel.find({});
-    console.log(personel)
-    if(personel) {
-        res.json(personel);
-    } else {
-        res.send('no results')
-    }
+    const data = personel.getAll();
+    res.json(data)
+}));
+
+app.post('/api/personels', asyncHandler(async(req, res) => {
+    personel.saveFile(req.body);
+    res.send('personel saved');
 }));
 
 const PORT = process.env.PORT || 5000;
